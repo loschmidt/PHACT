@@ -14,6 +14,5 @@ rule get_blasthits:
         "{workdir}/workflow/logs/rules/{query_id}_get_blasthits.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_get_blasthits.out"
-    cache: True
     shell:
         "python3 scripts/parse_blastp.py {input.blastp_out} {config[blast_hit_number]} {config[max_e_value]} {config[min_identity]} {params.blastdb} {input.query_fasta} 2> {log}"

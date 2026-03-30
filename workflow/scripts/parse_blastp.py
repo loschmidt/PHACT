@@ -3,26 +3,25 @@ import sys
 import re
 
 
-def get_fasta_dict(fasta_file):
-    fasta_dict = {}
-    
-    with open(fasta_file,'r') as f:
+def get_hit_dict(fasta_file, blast_list):
+    hit_dict = {}
+    blast_ids = list(map(lambda x: x.split(" ")[0], blast_list))
+    with open(fasta_file, 'r') as f:
         for line in f:
             if line.startswith('>'):
-                line = line[0] + line[1:].replace('>', '-') 
+                line = line[0] + line[1:].replace('>', '-')
                 header = line.split(">")[1].strip()
-                fasta_dict[header] = ''
+                if header.split(" ")[0] in blast_ids:
+                    hit_dict[header] = ''
             else:
-                fasta_dict[header] += line.strip()
-            
-    f.close()
+                if header in hit_dict:
+                    hit_dict[header] += line.strip()
+    print(hit_dict)
+    return hit_dict
 
-    return fasta_dict
-
-
-def parse_blastp_out(blastp_out_file,blast_hit_number,max_e_value,min_identity):
+def parse_blastp_out(blastp_out_file, blast_hit_number, max_e_value, min_identity):
     blast_list = []
-    with open(blastp_out_file,'r') as filein_:
+    with open(blastp_out_file, 'r') as filein_:
         for line in filein_:
             if len(blast_list) <= int(blast_hit_number):
                 if line.startswith(">"):
@@ -35,32 +34,23 @@ def parse_blastp_out(blastp_out_file,blast_hit_number,max_e_value,min_identity):
                             e_value = float(line.split("Expect = ")[1].split(",")[0])
                             identity_line = next(filein_)
                             identity = float(identity_line.split("Identities = ")[1].split("(")[1].split("%")[0])
-                            if e_value < float(max_e_value) and identity>float(min_identity):
+                            if e_value < float(max_e_value) and identity > float(min_identity):
                                 blast_list.append(best_hit)
-  
+
     return blast_list
 
-def write_to_file(blast_list,all_eu_file,blastp_out_file,query_fasta):
-    query_fasta_dict = get_fasta_dict(query_fasta)
-    all_eu_dict = get_fasta_dict(all_eu_file)
-    all_eu_keys_list = []
-    for k,v in all_eu_dict.items():
-        all_eu_keys_list.append(k.split(" ")[0].split("|")[1])
-    if set(all_eu_keys_list).issuperset(set(blast_list)):
-        with open(blastp_out_file.split(".")[0]+".fasta",'w') as f:
-            for k,v in all_eu_dict.items():
-                if k.split(" ")[0].split("|")[1] in blast_list:
-                    new_k = k.split(" ")[0]+"_"+k.split("OX=")[1].split(" ")[0]
-                    new_k = re.sub(r'[^\w>]', '_',new_k)
-                    f.write(">"+new_k + "\n" + v +"\n")
-            for h,s in query_fasta_dict.items():
-                if h.split(" ")[0].split("|")[1] in blast_list:
-                    pass
-                else:
-                    new_h = h.split(" ")[0]+"_"+h.split("OX=")[1].split(" ")[0]
-                    new_h = re.sub(r'[^\w>]', '_',new_h)
-                    f.write(">"+new_h + "\n" + s +"\n")
-        f.close()
+
+def write_to_file(blast_list, all_eu_file, blastp_out_file, query_fasta):
+    #query_fasta_dict = get_fasta_dict(query_fasta)
+    hit_dict = get_hit_dict(all_eu_file, blast_list)
+    with open(blastp_out_file.split(".")[0] + ".fasta", 'w') as f:
+        for k, v in hit_dict.items():
+            new_k = k.split(" ")[0] + "_" + k.split("TaxID=")[1].split(" ")[0]
+            new_k = re.sub(r'[^\w>]', '_', new_k)
+            print(new_k)
+            f.write(">" + new_k + "\n" + v + "\n")
+        with open(query_fasta, 'r') as query_file:
+            f.write(query_file.read())
 
 
 if __name__ == "__main__":
@@ -70,6 +60,6 @@ if __name__ == "__main__":
     min_identity = sys.argv[4]
     blastdb_file = sys.argv[5]
     query_fasta = sys.argv[6]
-    blast_list =  parse_blastp_out(blastp_out_file,blast_hit_number,max_e_value,min_identity)
-    write_to_file(blast_list,blastdb_file,blastp_out_file,query_fasta)
+    blast_list = parse_blastp_out(blastp_out_file, blast_hit_number, max_e_value, min_identity)
+    write_to_file(blast_list, blastdb_file, blastp_out_file, query_fasta)
 

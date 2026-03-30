@@ -11,6 +11,5 @@ rule msa_masking_fasttree:
         "{workdir}/workflow/logs/rules/{query_id}_masked_msa.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_masked_msa.out"
-    cache: True
     shell:
         "Rscript scripts/MSA_Masking.R {input.no_gap_file} {params.query_id} {output.no_gap_masked_file} 2> {log}"

@@ -9,7 +9,6 @@ rule psiblastp:
         "{workdir}/workflow/logs/rules/{query_id}_psiblastp.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_psiblastp.out"
-    cache: True
     conda:
         "../envs/blastp.yml"
     shell:

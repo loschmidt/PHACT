@@ -1,6 +1,6 @@
 import os
 import sys
-
+import shutil
 
 def make_query_fasta(acc_no,all_eu_file,output_path):
 
@@ -11,12 +11,15 @@ def make_query_fasta(acc_no,all_eu_file,output_path):
             if line.startswith('>'):
                 line = line[0] + line[1:].replace('>', '-') 
                 header = line.split(">")[1].strip()
-                if header.split("|")[1].split("|")[0] == acc_no:
+                if acc_no in header:
                     line = next(f).strip()
                     protein_dict[header] = ''
                     while not line.startswith('>'):
                         protein_dict[header] += line
-                        line = next(f).strip()
+                        try:
+                            line = next(f).strip()
+                        except:
+                            break
     f.close()
 
     with open(output_path,'w') as f:
@@ -26,11 +29,12 @@ def make_query_fasta(acc_no,all_eu_file,output_path):
 
 
 if __name__ == "__main__":
+#    print(sys.argv, file=sys.stderr)
     acc_no = sys.argv[1]
     all_eu_file = sys.argv[2]
     output_path = sys.argv[3]
-    make_query_fasta(acc_no,all_eu_file,output_path)
-    
-    
+    input_path = sys.argv[4]
+    #make_query_fasta(acc_no,all_eu_file,output_path)
+    shutil.copyfile(sys.argv[4] + "/" + acc_no + ".fasta", output_path) 
 
 

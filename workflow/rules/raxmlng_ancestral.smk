@@ -14,7 +14,6 @@ rule raxmlng_ancestral:
         "{workdir}/workflow/logs/rules/{query_id}_raxmlng_ancestral.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_raxmlng_ancestral.out"
-    cache: True
     resources:
         cpus=4
     shell:

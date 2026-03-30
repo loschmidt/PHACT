@@ -11,6 +11,5 @@ rule remove_gaps:
         "{workdir}/workflow/logs/rules/{query_id}_remove_gaps.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_remove_gaps.out"
-    cache: True
     shell:
         "python3 scripts/remove_gaps.py {input.query_file} {input.msa_file} {input.tree_file}  {output.no_gap_file} 2> {log}"

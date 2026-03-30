@@ -1,16 +1,17 @@
 cnfigfile: "config.yml"
 
 #outputs
-workdir: /truba/home/emrah/WORKFOLDER/PROD/031123_run/PHACT 
-configfile_path: /truba/home/emrah/WORKFOLDER/PROD/031123_run/PHACT/config/config.yml
-archived_path: /truba/home/emrah/shared/newdb-archived
-query_ids: ["O95153", "O60312"] 
+#workdir: /root/PHACT 
+workdir: /home/user
+configfile_path: /opt/PHACT/config/config.yml
+archived_path: /opt/phact-newdb-archived
+query_ids: ["query"]
 
 #blast
-unified_folder: "resources/unified_database"
-unified_file: "unified_fasta.fasta"
-blastdb_folder: "resources/blast_database"
-blastdb_file: "uniprot_reference_proteomes_canonical_db"
+unified_folder: "/resources/"
+unified_file: "uniref100.fasta"
+blastdb_folder: "/resources/uniref100"
+blastdb_file: "uniref100"
 outfmt: "0"
 max_target_seqs: "5000"
 num_iterations: "2"

@@ -57,7 +57,8 @@ compute_score <- function(file_nwk, file_rst, file_fasta, output_name, human_id,
   
   # Human position (leaf & node)
   h_name <- human_id
-  human_codeml <- names_all[grep(pattern = h_name, x = names_all, fixed = TRUE)]
+#  human_codeml <- names_all[grep(pattern = h_name, x = names_all, fixed = TRUE)]
+  human_codeml <- names_all[names_all == h_name]
   leaf_human <- tree_info[which(tree_info$label == human_codeml), "node"]
   human_plc <- leaf_human
   node_human <- tree_info[which(tree_info$label == human_codeml), "parent"]

@@ -11,7 +11,6 @@ rule ml_tree:
         "{workdir}/workflow/logs/rules/{query_id}_mltree.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_ml_tree.out"
-    cache: True
     resources:
         cpus=8
     shell:

@@ -9,7 +9,6 @@ rule msa:
         "{workdir}/workflow/logs/rules/{query_id}_msa.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_id}_msa.out"
-    cache: True
     resources:
         cpus=4
     shell:

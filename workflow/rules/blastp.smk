@@ -8,8 +8,7 @@ rule blastp:
         "{workdir}/workflow/logs/rules/{query_fasta}_blastp.err"
     benchmark:
         "{workdir}/workflow/logs/benchmarks/{query_fasta}_blastp.out"
-    cache: True
     conda:
         "../envs/blastp.yml"
     shell:
-        "blastp -query {input.fasta} -db {input.blastdb} -outfmt {config[outfmt]} -out {output.outfile} -max_target_seqs {config[max_target_seqs]} 2> {log}"
+        "blastp -query {input.fasta} -db {input.blastdb} -outfmt {config[outfmt]} -out {output.outfile} -max_target_seqs {config[max_target_seqs]} -num_threads 5 2> {log}"
