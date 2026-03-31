@@ -8,8 +8,8 @@ rule msa_masking_fasttree:
     conda:
         "../envs/r-base.yml"
     log:
-        "{workdir}/workflow/logs/rules/{query_id}_masked_msa.err"
+        "{workdir}/logs/rules/{query_id}_masked_msa.err"
     benchmark:
-        "{workdir}/workflow/logs/benchmarks/{query_id}_masked_msa.out"
+        "{workdir}/logs/benchmarks/{query_id}_masked_msa.out"
     shell:
-        "Rscript scripts/MSA_Masking.R {input.no_gap_file} {params.query_id} {output.no_gap_masked_file} 2> {log}"
+        "Rscript {config[install_dir]}/workflow/scripts/MSA_Masking.R {input.no_gap_file} {params.query_id} {output.no_gap_masked_file} 2> {log}"

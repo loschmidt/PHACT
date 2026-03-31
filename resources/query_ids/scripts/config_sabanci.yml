@@ -1,4 +1,0 @@
-cluster: 
-  name: "sabanci" 
-  query_file: "../under_computation_tosun"
-  archived_path: "/cta/groups/adebali/static/archived"

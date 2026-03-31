@@ -11,48 +11,40 @@ def get_my_id(query_file):
         print(k)
         return k
 
-def get_gap_positions(seqDict,my_id):
-    for key, value in seqDict.items():
-        if my_id == key:
-            #print(value)
-            return [i for i, x in enumerate(value) if x == "-"]
-            #print(indices)
-
-def get_sequences_without_gap(seqDict,indices):
-    new_seqDict = {}
-    for k,v in seqDict.items():
-        #print(v)
-        #print(new_seqDict)
-        #print(indices)
-        #print( [v[i] for i in range(len(v)) if i not in indices])       
-        new_seqDict[k] = ''.join([v[i] for i in range(len(v)) if i not in indices])
-        #print(new_seqDict)  
-    return new_seqDict
+def get_gap_positions(fasta_file, my_id):
+    """Single pass — stop as soon as query sequence is found."""
+    for header, seq in iter_fasta(fasta_file):
+        if header == my_id:
+            return {i for i, c in enumerate(seq) if c == "-"}
+    raise ValueError(f"Query ID '{my_id}' not found in alignment FASTA.")
 
 
-def write_new_fasta(new_seqDict,fasta_file,tree_file,output_file):
-    t = Tree(tree_file,format=1)
-    leaves = []
-    for leaf in t:
-        leaves.append(leaf.name)
-    with open (output_file,'w') as new_file:
-        #print(new_file)
-        for newheader,value in  new_seqDict.items():
-            if newheader in leaves:
-                new_value = re.sub(r'[BXJZUO#$]', '-',value)
-                if not all([c=="-" for c in new_value]):
-                    new_file.write(">" +newheader+"\n" + new_value+ "\n")
-    new_file.close()
-
+def write_new_fasta(fasta_file, gap_indices, leaves, output_file):
+    """Single pass — stream, filter, transform, write. No dict stored."""
+    with open(output_file, 'w') as out:
+        for header, seq in iter_fasta(fasta_file):
+            if header not in leaves:
+                continue
+            trimmed = ''.join(seq[i] for i in range(len(seq)) if i not in gap_indices)
+            cleaned = re.sub(r'[BXJZUO#$]', '-', trimmed)
+            if not all(c == "-" for c in cleaned):
+                out.write(f">{header}\n{cleaned}\n")
 
 
 if __name__ == "__main__":
-    query_file = sys.argv[1]
-    fasta_file= sys.argv[2]
-    tree_file= sys.argv[3]
-    output_file= sys.argv[4]
-    my_id= get_my_id(query_file)
-    seqDict = get_fasta_dict(fasta_file)
-    gap_indices = get_gap_positions(seqDict,my_id)
-    new_seqDict = get_sequences_without_gap(seqDict,gap_indices)
-    write_new_fasta(new_seqDict,fasta_file,tree_file,output_file)
+    if len(sys.argv) != 5:
+        print("Usage: script.py <query_file> <fasta_file> <tree_file> <output_file>")
+        sys.exit(1)
+
+    query_file  = sys.argv[1]
+    fasta_file  = sys.argv[2]
+    tree_file   = sys.argv[3]
+    output_file = sys.argv[4]
+
+    my_id       = get_my_id(query_file)
+    gap_indices = get_gap_positions(fasta_file, my_id)
+
+    leaves = {leaf.name for leaf in Tree(tree_file, format=1)}
+
+    write_new_fasta(fasta_file, gap_indices, leaves, output_file)
+

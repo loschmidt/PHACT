@@ -3,7 +3,9 @@ cnfigfile: "config.yml"
 #outputs
 #workdir: /root/PHACT 
 workdir: /home/user
+mount_dir: /dbs/
 configfile_path: /opt/PHACT/config/config.yml
+install_dir: /opt/PHACT/
 archived_path: /opt/phact-newdb-archived
 query_ids: ["query"]
 
@@ -12,7 +14,7 @@ unified_folder: "/resources/"
 unified_file: "uniref100.fasta"
 blastdb_folder: "/resources/uniref100"
 blastdb_file: "uniref100"
-outfmt: "0"
+outfmt: "6 saccver"
 max_target_seqs: "5000"
 num_iterations: "2"
 
@@ -36,7 +38,6 @@ raxml_tree_number: "20"
 
 #iqtree
 iqtree_seed: "1234"
-iqtree_ancestral_model: "scripts/vals.txt+R4"
 
 #fasttree
 fasttree_model: "-lg"

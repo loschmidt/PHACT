@@ -10,11 +10,11 @@ rule iqtree_ancestral:
     conda:
         "../envs/iqtree.yml"
     log:
-        "{workdir}/workflow/logs/rules/{query_id}_iqtree_ancestral.err"
+        "{workdir}/logs/rules/{query_id}_iqtree_ancestral.err"
     benchmark:
-        "{workdir}/workflow/logs/benchmarks/{query_id}_iqtree_ancestral.out"
+        "{workdir}/logs/benchmarks/{query_id}_iqtree_ancestral.out"
     resources:
         cpus=4
     shell:
-        "iqtree2 -redo -s {input.no_gap_masked_msa} -te {input.unrooted_tree} -m {config[iqtree_ancestral_model]} -asr -safe -nt {resources.cpus} --prefix {params.iqtree_ancestral_out_name}"
+        "iqtree2 -redo -s {input.no_gap_masked_msa} -te {input.unrooted_tree} -m {config[install_dir]}/workflow/scripts/vals.txt+R4 -asr -safe -nt {resources.cpus} --prefix {params.iqtree_ancestral_out_name}"
 

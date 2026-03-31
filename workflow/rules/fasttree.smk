@@ -8,9 +8,9 @@ rule fast_tree:
     conda:
         "../envs/fasttree.yml"
     log:
-        "{workdir}/workflow/logs/rules/{query_id}_fastreetree.err"
+        "{workdir}/logs/rules/{query_id}_fastreetree.err"
     benchmark:
-        "{workdir}/workflow/logs/benchmarks/{query_id}_fasttree_tree.out"
+        "{workdir}/logs/benchmarks/{query_id}_fasttree_tree.out"
     shell:
         "FastTreeMP {config[fasttree_model]} {input.trimmed_msa}  >  {output.bestTree} 2>{log}"
 

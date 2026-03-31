@@ -6,9 +6,9 @@ rule msa:
     conda:
         "../envs/mafft.yml"
     log:
-        "{workdir}/workflow/logs/rules/{query_id}_msa.err"
+        "{workdir}/logs/rules/{query_id}_msa.err"
     benchmark:
-        "{workdir}/workflow/logs/benchmarks/{query_id}_msa.out"
+        "{workdir}/logs/benchmarks/{query_id}_msa.out"
     resources:
         cpus=4
     shell:

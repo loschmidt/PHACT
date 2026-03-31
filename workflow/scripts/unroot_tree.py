@@ -6,22 +6,27 @@ import re
 import ete3
 from ete3 import Tree
 
-def unroot_tree(tree_file,no_gap_msa_file):
-    msa_dict = get_fasta_dict(no_gap_msa_file)
-    seqs_list = list(msa_dict.keys())
-    t = Tree(tree_file,format=1)
-    prune_list = []
-    leaves = t.get_leaf_names()
-    for leaf in leaves:
-        if leaf in seqs_list:
-            prune_list.append(leaf)
-    
+def iter_fasta_headers(fasta_file):
+    return map(lambda x: x[0], iter_fasta(fasta_file))
+
+
+def unroot_tree(tree_file, no_gap_msa_file):
+    t = Tree(tree_file, format=1)
+    seq_headers = set(iter_fasta_headers(no_gap_msa_file))
+
+    prune_list = filter(seq_headers.__contains__, t.get_leaf_names())
+
     t.prune(prune_list)
     t.unroot()
-    t.write(outfile=tree_file+"_unrooted",format=1)
+    t.write(outfile=tree_file + "_unrooted", format=1)
+
 
 if __name__ == "__main__":
-    tree_file = sys.argv[1]
-    no_gap_msa_file = sys.argv[2]
-    unroot_tree(tree_file,no_gap_msa_file)
+    if len(sys.argv) != 3:
+        print("Usage: script.py <tree_file> <no_gap_msa_file>")
+        sys.exit(1)
 
+    tree_file       = sys.argv[1]
+    no_gap_msa_file = sys.argv[2]
+
+    unroot_tree(tree_file, no_gap_msa_file)

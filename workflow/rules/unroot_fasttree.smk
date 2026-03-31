@@ -5,10 +5,10 @@ rule unroot_fasttree:
     output:
       "{workdir}/results/{query_id}/6_fasttree/{query_id}.nwk_unrooted",
     log:
-        "{workdir}/workflow/logs/rules/{query_id}_unroot_tree.err"
+        "{workdir}/logs/rules/{query_id}_unroot_tree.err"
     benchmark:
-        "{workdir}/workflow/logs/benchmarks/{query_id}_unroot_tree.out"
+        "{workdir}/logs/benchmarks/{query_id}_unroot_tree.out"
     conda:
         "../envs/remove_outlier.yml"
     shell:
-        "python  scripts/unroot_tree.py {input.input_tree}  {input.no_gap_msa_file} 2> {log}"
+        "python  {config[install_dir]}/workflow/scripts/unroot_tree.py {input.input_tree}  {input.no_gap_msa_file} 2> {log}"
