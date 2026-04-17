@@ -1,10 +1,10 @@
 from ete3 import Tree
 import os
 import sys
-from fasta_dict import *
 import re
 import ete3
 from ete3 import Tree
+from iterate_fasta import iter_fasta
 
 def iter_fasta_headers(fasta_file):
     return map(lambda x: x[0], iter_fasta(fasta_file))

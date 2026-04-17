@@ -1,15 +1,9 @@
 import os
 import sys
-from fasta_dict import *
 import re
 import ete3
 from ete3 import Tree
-
-def get_my_id(query_file):
-    query_dict = get_fasta_dict(query_file)
-    for k,v in query_dict.items():
-        print(k)
-        return k
+from iterate_fasta import iter_fasta
 
 def get_gap_positions(fasta_file, my_id):
     """Single pass — stop as soon as query sequence is found."""
