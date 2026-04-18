@@ -26,16 +26,16 @@ def write_new_fasta(fasta_file, gap_indices, leaves, output_file):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
-        print("Usage: script.py <query_file> <fasta_file> <tree_file> <output_file>")
+    if len(sys.argv) != 6:
+        print("Usage: script.py <query_file> <fasta_file> <tree_file> <output_file> <query_id>")
         sys.exit(1)
 
     query_file  = sys.argv[1]
     fasta_file  = sys.argv[2]
     tree_file   = sys.argv[3]
     output_file = sys.argv[4]
+    my_id = sys.argv[5]
 
-    my_id       = get_my_id(query_file)
     gap_indices = get_gap_positions(fasta_file, my_id)
 
     leaves = {leaf.name for leaf in Tree(tree_file, format=1)}
