@@ -17,6 +17,7 @@ def write_new_fasta(fasta_file, gap_indices, leaves, output_file):
     """Single pass — stream, filter, transform, write. No dict stored."""
     with open(output_file, 'w') as out:
         for header, seq in iter_fasta(fasta_file):
+            header = header.split(" ")[0]
             if header not in leaves:
                 continue
             trimmed = ''.join(seq[i] for i in range(len(seq)) if i not in gap_indices)
@@ -39,6 +40,7 @@ if __name__ == "__main__":
     gap_indices = get_gap_positions(fasta_file, my_id)
 
     leaves = {leaf.name for leaf in Tree(tree_file, format=1)}
+    print(leaves)
 
     write_new_fasta(fasta_file, gap_indices, leaves, output_file)
 
