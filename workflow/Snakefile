@@ -8,6 +8,8 @@ configfile: configfile_path
 
 path=config["archived_path"]
 
+config["workdir"]=os.getcwd()
+
 query_ids=config["query_ids"]
 for query in query_ids:
         if (os.path.isdir(path+"/"+query)):
